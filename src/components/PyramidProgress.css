@@ -1,87 +1,71 @@
 .pyramid-container {
-  padding: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-}
-
-.pyramid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
   width: 100%;
+  padding: 40px;
 }
 
-.pyramid-level {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  transition: all 0.5s ease;
-  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%);
-  position: relative;
-  overflow: hidden;
+.pyramid-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem 2rem;
+  width: 100%;
+  max-width: 700px;
 }
 
-/* Pyramid widths */
-.level-5 { width: 40%; height: 80px; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
-.level-4 { width: 60%; height: 60px; clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%); }
-.level-3 { width: 80%; height: 60px; clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%); }
-.level-2 { width: 95%; height: 60px; clip-path: polygon(5% 0, 95% 0, 100% 100%, 0 100%); }
-.level-1 { width: 110%; height: 60px; clip-path: polygon(5% 0, 95% 0, 100% 100%, 0 100%); border-radius: 0 0 10px 10px; }
-
-/* States */
-.pyramid-level.locked {
-  background: rgba(30, 41, 59, 0.4);
-  color: rgba(255, 255, 255, 0.2);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+.pyramid-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
-.pyramid-level.completed {
-  background: var(--success);
-  color: white;
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+.pyramid-segment {
+  transition: all 0.3s ease;
 }
 
-.pyramid-level.active {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
-  transform: scale(1.05);
-  z-index: 10;
-  animation: pulse 2s infinite;
+.pyramid-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.level-content {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  z-index: 2;
+/* ESTADOS */
+
+.active .pyramid-segment {
+  fill: #6366f1;
 }
 
-.level-5 .level-content {
-  margin-top: 20px;
+.active .pyramid-label {
+  fill: #ffffff;
 }
 
-@keyframes pulse {
-  0% { box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
-  50% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.8); }
-  100% { box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
+.active .pyramid-icon {
+  color: #ffffff;
 }
 
-@media (max-width: 768px) {
-  .pyramid-level {
-    padding: 0.5rem;
-  }
-  .level-title {
-    font-size: 0.8rem;
-  }
-  .level-5 { width: 50%; height: 70px; }
-  .level-4 { width: 75%; }
-  .level-3 { width: 90%; }
-  .level-2 { width: 100%; }
-  .level-1 { width: 110%; }
+.completed .pyramid-segment {
+  fill: #10b981;
+}
+
+.completed .pyramid-label {
+  fill: #ffffff;
+}
+
+.completed .pyramid-icon {
+  color: #ffffff;
+}
+
+.locked .pyramid-segment {
+  fill: rgba(255, 255, 255, 0.06);
+}
+
+.locked .pyramid-label {
+  fill: rgba(255, 255, 255, 0.35);
+}
+
+.locked .pyramid-icon {
+  color: rgba(255, 255, 255, 0.3);
 }
