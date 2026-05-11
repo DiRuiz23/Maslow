@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './LevelCard.css';
 
-const LevelCard = ({ level, onOptionSelect }) => {
+const LevelCard = ({ level, scenario, onOptionSelect }) => {
   const [animateState, setAnimateState] = useState('animate-fade-in');
 
   // When level changes, trigger fade in again
@@ -16,6 +16,12 @@ const LevelCard = ({ level, onOptionSelect }) => {
     onOptionSelect(option);
   };
 
+  const shuffledOptions = React.useMemo(() => {
+    return [...scenario.options].sort(
+      () => Math.random() - 0.5
+    );
+  }, [scenario]);
+
   return (
     <div className={`level-card glass ${animateState}`}>
       <div className="level-header">
@@ -24,18 +30,20 @@ const LevelCard = ({ level, onOptionSelect }) => {
       </div>
       
       <div className="level-body">
-        <p className="description">{level.description}</p>
-        <p className="question">{level.question}</p>
+        <p className="description">{scenario.description}</p>
+        <p className="question">{scenario.question}</p>
       </div>
 
       <div className="level-options">
-        {level.options.map((option, index) => (
+        {shuffledOptions.map((option, index) => (
           <button 
             key={index} 
             className="glass-btn option-btn"
             onClick={() => handleOptionClick(option)}
           >
-            <span className="option-letter">{option.id}</span>
+            <span className="option-letter">
+              {String.fromCharCode(65 + index)}
+            </span>
             <span className="option-text">{option.text}</span>
           </button>
         ))}

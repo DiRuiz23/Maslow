@@ -7,45 +7,98 @@ import './App.css';
 import { AlertTriangle, CheckCircle, RefreshCcw, Trophy, Heart, Skull } from 'lucide-react';
 
 function App() {
+
+  const getRandomScenarioIndex = (level, currentIndex = -1) => {
+    let newIndex;
+    do {
+      newIndex = Math.floor(
+        Math.random() * level.scenarios.length
+      );
+    } while (
+      level.scenarios.length > 1 &&
+      newIndex === currentIndex
+    );
+    return newIndex;
+  };
+
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [feedback, setFeedback] = useState(null); // { type: 'error' | 'success', message: '' }
   const [gameCompleted, setGameCompleted] = useState(false);
   const [shakeCard, setShakeCard] = useState(false);
 
   const currentLevel = levels[currentLevelIndex];
+  const [currentScenarioIndex, setCurrentScenarioIndex] = useState(() =>
+    getRandomScenarioIndex(levels[0])
+  );
+  const currentScenario = currentLevel.scenarios[currentScenarioIndex];
+
   const [lives, setLives] = useState(3);
   const [gameOver, setGameOver] = useState(false);
+
 
   // src/App.jsx
 
   const handleOptionSelect = (option) => {
-    if (option.isCorrect) {
-      setFeedback({ type: 'success', message: option.successMessage });
-      
-      setTimeout(() => {
-        setFeedback(null);
-        if (currentLevelIndex < levels.length - 1) {
-          setCurrentLevelIndex(prev => prev + 1);
-        } else {
-          setGameCompleted(true);
-        }
-      }, 2000);
-    } else {
-      // LÓGICA DE VIDAS: Restamos una vida
-      const newLives = lives - 1;
-      setLives(newLives);
-      
-      if (newLives <= 0) {
-        // Si llega a 0, activamos Game Over
-        setGameOver(true);
+  if (option.isCorrect) {
+
+    setFeedback({
+      type: 'success',
+      message: option.successMessage
+    });
+
+    setTimeout(() => {
+
+      setFeedback(null);
+
+      if (currentLevelIndex < levels.length - 1) {
+
+        const nextLevelIndex = currentLevelIndex + 1;
+
+        setCurrentLevelIndex(nextLevelIndex);
+
+        setCurrentScenarioIndex(
+         getRandomScenarioIndex(
+           levels[nextLevelIndex]
+          )
+        );
+
       } else {
-        // Si aún tiene vidas, mostramos el error normal
-        setFeedback({ type: 'error', message: option.failMessage });
-        setShakeCard(true);
-        setTimeout(() => setShakeCard(false), 500);
+        setGameCompleted(true);
       }
+
+    }, 2000);
+
+  } else {
+
+    const newLives = lives - 1;
+
+    setLives(newLives);
+
+    if (newLives <= 0) {
+
+      setGameOver(true);
+
+    } else {
+
+      setFeedback({
+        type: 'error',
+        message: option.failMessage
+      });
+
+      setShakeCard(true);
+
+      // CAMBIAR ESCENARIO AL FALLAR
+      setCurrentScenarioIndex(
+       getRandomScenarioIndex(
+         currentLevel,
+         currentScenarioIndex
+        )
+      );
+
+      setTimeout(() => setShakeCard(false), 500);
     }
-  };
+  }
+};
 
   const handleRetry = () => {
     setFeedback(null);
@@ -53,13 +106,22 @@ function App() {
 
 // src/App.jsx
 
-  const handleRestartGame = () => {
-    setCurrentLevelIndex(0);
-    setGameCompleted(false);
-    setGameOver(false); // Resetear Game Over
-    setLives(3);        // Resetear Vidas
-    setFeedback(null);
-  };
+ const handleRestartGame = () => {
+
+  setCurrentLevelIndex(0);
+
+  setCurrentScenarioIndex(
+    getRandomScenarioIndex(levels[0])
+  );
+
+  setGameCompleted(false);
+
+  setGameOver(false);
+
+  setLives(3);
+
+  setFeedback(null);
+};
 
 // src/App.jsx
 
@@ -127,6 +189,7 @@ return (
         ) : (
           <LevelCard 
             level={currentLevel} 
+            scenario={currentScenario}
             onOptionSelect={handleOptionSelect} 
           />
         )}
