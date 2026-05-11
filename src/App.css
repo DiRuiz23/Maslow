@@ -92,3 +92,19 @@
     min-height: calc(100vh - 4rem);
   }
 }
+
+/* src/App.css */
+
+.lives-container {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem; /* Cambiado de right a left */
+  display: flex;
+  flex-direction: row; /* Asegura que estén en una sola fila */
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  z-index: 10;
+  border-radius: 1rem;
+  min-width: fit-content; /* Evita que el contenedor se encoja y amontone los corazones */
+}
